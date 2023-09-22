@@ -208,14 +208,39 @@ class MIDIAccess {
   let freq1,freq2, freq3, freq4, freq5;
   let val;
   
-  
+  let button;
+  let slider;
   
   function setup() {
     createCanvas(100, 100);
+
+    myPTag = createP("Curiosity");
+    myPTag.style("font-size", "15pt");
+    myPTag.style("color", "white");
+    myPTag.position(10, 0);
+
+
+    //create button for resume audio context
+    button = createButton('Start');
+    console.log(getAudioContext().state);
+    //change html text to "Stop"
+    if(getAudioContext().state !== 'running') {
+      button.html = 'Start';
+    }else {
+      button.html = 'Stop';
+    }
+    button.position(10, 50);
+    button.mousePressed(start);
+    
+    //create slider for handle microphone volume
+    slider = createSlider(0, 1, 0.5, 0.01);
+    slider.position(10, 80);
+
+
     val = midiToFreq(50);
     //console.log(val);
     //converti toutes les valeurs MIDI en fréquences
-    freq1 = midiToFreq(midiNotes[0]);
+    freq1 = midiToFreq(midiNotes[0]);   
     freq2 = midiToFreq(midiNotes[1]);
     freq3 = midiToFreq(midiNotes[2]);
     freq4 = midiToFreq(midiNotes[3]);
@@ -257,6 +282,8 @@ class MIDIAccess {
     console.log(mic);
     mic.start();
     mic.connect();
+    
+
     fft.setInput(mic);
     
     fft.setInput(inst1.reverb);
@@ -278,8 +305,26 @@ class MIDIAccess {
   
   }
 
+  function start() {
+    console.log(getAudioContext().state);
+    let button = document.querySelector('button');
+    if(getAudioContext().state !== 'running') {
+        getAudioContext().resume();
+        button.innerHTML = 'Stop';
+    }
+    else {
+        getAudioContext().suspend();
+        button.innerHTML = 'Start';
+    }
+}
+
 function draw() {
   background('black');
+
+  //handle microphone volume
+  let val = slider.value();
+  console.log(val);
+  mic.amp(val);
  
   fft.analyze();
   var spectrum = fft.analyze();
