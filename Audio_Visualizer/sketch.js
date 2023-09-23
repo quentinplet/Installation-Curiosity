@@ -149,7 +149,7 @@ class MIDIAccess {
   
          break;
          
-         //Paramètrer ici toutes les valeurs de contrôles pour nottament l'amplitude des oscillateurs
+         //Paramètrer ici toutes les valeurs de contrôles pour notamment l'amplitude des oscillateurs
          case 176 :
             
          switch (input) {
@@ -233,7 +233,7 @@ class MIDIAccess {
     button.mousePressed(start);
     
     //create slider for handle microphone volume
-    slider = createSlider(0, 1, 0.5, 0.01);
+    slider = createSlider(0, 1, 0, 0.01);
     slider.position(10, 80);
 
 
@@ -323,7 +323,7 @@ function draw() {
 
   //handle microphone volume
   let val = slider.value();
-  console.log(val);
+  // console.log(val);
   mic.amp(val);
  
   fft.analyze();
@@ -366,7 +366,7 @@ function draw() {
   
   //cercle central
   stroke(colorPalette[3]);
-  strokeWeight(10+mapBass3/5);
+  strokeWeight(10+mapBass3/10);
   //taille de l'ensemble
   scale(scaleBass2/2);
   //rotation micro off
